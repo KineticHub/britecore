@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DjangoModelDependency</ID>
+  <OriginalElement>#britecore</OriginalElement>
+  <nodes>
+    <node x="0.0" y="246.0">insurance.models.EnumOption</node>
+    <node x="492.00000000000006" y="123.0">insurance.models.DateField</node>
+    <node x="15.0" y="123.0">insurance.models.EnumField</node>
+    <node x="739.25" y="0.0">insurance.models.RiskType</node>
+    <node x="956.0" y="123.0">insurance.models.NumberField</node>
+    <node x="1467.0" y="123.0">insurance.models.TextField</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="insurance.models.DateField" target="insurance.models.RiskType">
+      <point x="0.0" y="-36.5" />
+      <point x="714.0" y="103.0" />
+      <point x="903.125" y="103.0" />
+      <point x="-54.625" y="36.5" />
+    </edge>
+    <edge source="insurance.models.EnumField" target="insurance.models.RiskType">
+      <point x="0.0" y="-36.5" />
+      <point x="243.5" y="93.0" />
+      <point x="793.875" y="93.0" />
+      <point x="-163.875" y="36.5" />
+    </edge>
+    <edge source="insurance.models.NumberField" target="insurance.models.RiskType">
+      <point x="0.0" y="-36.5" />
+      <point x="1201.5" y="103.0" />
+      <point x="1012.375" y="103.0" />
+      <point x="54.625" y="36.5" />
+    </edge>
+    <edge source="insurance.models.EnumOption" target="insurance.models.EnumField">
+      <point x="0.0" y="-36.5" />
+      <point x="0.0" y="36.5" />
+    </edge>
+    <edge source="insurance.models.TextField" target="insurance.models.RiskType">
+      <point x="0.0" y="-36.5" />
+      <point x="1686.0" y="93.0" />
+      <point x="1121.625" y="93.0" />
+      <point x="163.875" y="36.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="952.5" y="159.5" />
+  <SelectedNodes>
+    <node>insurance.models.TextField</node>
+  </SelectedNodes>
+  <Categories />
+</Diagram>
+

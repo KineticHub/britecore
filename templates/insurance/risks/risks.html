@@ -1,0 +1,26 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Risk Types Form Page</title>
+
+    <script src="{% static 'components/vue.js' %}"></script>
+    <script src="{% static 'components/vue-monthly-picker.min.js' %}"></script>
+</head>
+<body>
+    <div id="risks-app">
+        <ul>
+            <li v-for="risk in risks">
+                <h4>[[ risk ]]</h4>
+                <textarea v-if="risk==='r1'"></textarea>
+{#                <vue-monthly-picker#}
+{#                    v-model="selectedMonth">Test#}
+{#                </vue-monthly-picker>#}
+            </li>
+        </ul>
+    </div>
+    <script src="{% static 'insurance/risks/risks.min.js' %}"></script>
+</body>
+</html>
