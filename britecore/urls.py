@@ -6,8 +6,8 @@ from insurance.views import RiskViewSet, RiskTypeViewSet
 
 
 router = routers.DefaultRouter()
+router.register(r'risks/types', RiskTypeViewSet, base_name='risks-types-view')
 router.register(r'risks', RiskViewSet, base_name='risks-view')
-router.register(r'risk-types', RiskTypeViewSet, base_name='risks-type-view')
 
 
 urlpatterns = [

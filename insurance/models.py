@@ -49,7 +49,7 @@ class RiskField(models.Model):
     name = models.CharField(max_length=255)
     risk_type = models.ForeignKey(RiskType, related_name="fields", on_delete=models.CASCADE)
     field_type = models.CharField(max_length=6, choices=FIELD_TYPES)
-    field_choices = models.TextField(blank=True, null=True,
+    field_choices = models.TextField(default="", blank=True,
                                      help_text="If you are allowing the user to choose from preselected options via "
                                                "the enum type, please list the options here separated by a comma.")
 
@@ -75,21 +75,21 @@ class TextField(BaseField):
         return str(self.text)
 
 
-class NumberField(models.Model):
+class NumberField(BaseField):
     number = models.IntegerField()
 
     def __str__(self):
         return str(self.number)
 
 
-class DateField(models.Model):
+class DateField(BaseField):
     date = models.DateField()
 
     def __str__(self):
         return str(self.date)
 
 
-class EnumField(models.Model):
+class EnumField(BaseField):
     choice = models.TextField()
 
     def __str__(self):

@@ -9,11 +9,11 @@
 // import Vue from 'vue';
 // import VueMonthlyPicker from 'vue-monthly-picker';
 
-Vue.component('date-field', {
-    components: {
-        'vue-monthly-picker'
-    }
-});
+// Vue.component('date-field', {
+//     components: {
+//         'vue-monthly-picker'
+//     }
+// });
 
 Vue.component('text-field', {
   template: '<textarea></textarea>'
@@ -26,4 +26,3 @@ new Vue({
       risks: ['r1', 'r2', 'r2']
     }
 });
-
