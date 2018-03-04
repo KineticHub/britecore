@@ -11,7 +11,6 @@ router.register(r'risks', RiskViewSet, base_name='risks-view')
 
 
 urlpatterns = [
-    # url(r'^risks/$', views.risks, name='risks-view'),
     url(r'^risks/$', TemplateView.as_view(template_name="insurance/risks/risks.html")),
     url(r'^api/', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),

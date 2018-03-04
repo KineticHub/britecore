@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.apps import apps
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 
@@ -45,6 +46,13 @@ class RiskField(models.Model):
         (DATE, 'date'),
         (ENUM, 'enum'),
     )
+
+    FIELD_MODELS = {
+        TEXT: 'TextField',
+        NUMBER: 'NumberField',
+        DATE: 'DateField',
+        ENUM: 'EnumField'
+    }
 
     name = models.CharField(max_length=255)
     risk_type = models.ForeignKey(RiskType, related_name="fields", on_delete=models.CASCADE)
@@ -94,14 +102,3 @@ class EnumField(BaseField):
 
     def __str__(self):
         return str(self.choice)
-#
-#
-# class EnumOption(models.Model):
-#     enum = models.ForeignKey(EnumField, related_name='options', on_delete=models.CASCADE)
-#     option = models.CharField(max_length=255)
-#
-#     class Meta:
-#         unique_together = ("enum", "option")
-#
-#     def __str__(self):
-#         return str(self.enum) + " " + self.option
