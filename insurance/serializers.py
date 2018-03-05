@@ -51,7 +51,10 @@ class RiskTypeSerializer(serializers.ModelSerializer):
         fields_data = validated_data.pop('fields')
         risk_type = RiskType.objects.get(name=validated_data['name'])
         for field_data in fields_data:
-            RiskField.objects.create(risk_type=risk_type, **field_data)
+            if RiskField.objects.filter(risk_type=risk_type, name=field_data['name']).exists():
+                RiskField.objects.filter(risk_type=risk_type, name=field_data['name']).update(**field_data)
+            else:
+                RiskField.objects.create(risk_type=risk_type, **field_data)
         return risk_type
 
 
