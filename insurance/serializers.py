@@ -7,11 +7,28 @@ class RiskFieldValueRelatedField(serializers.ModelSerializer):
 
     def to_internal_value(self, data):
         request = self.context['request']
+        print request.data
+        print request.method
         risk_type = RiskType.objects.get(name=request.data['type'])
         risk_field = RiskField.objects.get(name=data['field_name'], risk_type=risk_type)
         model_data = {'field': risk_field, data['field_type']: data['value']}
         FieldModel = apps.get_model('insurance', RiskField.FIELD_MODELS[data['field_type']])
-        field_value = FieldModel.objects.create(**model_data)
+
+        field_value = None
+
+        if request.method == 'POST':
+            field_value = FieldModel.objects.create(**model_data)
+        elif request.method == 'PUT':
+            risk = Risk.objects.get(uuid=request.data['uuid'])
+
+            for field in risk.values.all():
+                if field.field_object.field.name == data['field_name']:
+                    setattr(field.field_object, data['field_type'], data['value'])
+                    field.field_object.save()
+                    return field.field_object
+            field_value = FieldModel.objects.create(**model_data)
+            risk.values.create(field_object=field_value)
+
         return field_value
 
     def to_representation(self, value):
@@ -50,11 +67,19 @@ class RiskTypeSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         fields_data = validated_data.pop('fields')
         risk_type = RiskType.objects.get(name=validated_data['name'])
+        field_names = []
         for field_data in fields_data:
             if RiskField.objects.filter(risk_type=risk_type, name=field_data['name']).exists():
                 RiskField.objects.filter(risk_type=risk_type, name=field_data['name']).update(**field_data)
             else:
                 RiskField.objects.create(risk_type=risk_type, **field_data)
+            field_names.append(field_data['name'])
+
+        delete_fields = []
+        for field in risk_type.fields.all():
+            if field.name not in field_names:
+                delete_fields.append(field.id)
+        risk_type.fields.filter(id__in=delete_fields).delete()
         return risk_type
 
 
@@ -74,9 +99,26 @@ class RiskSerializer(serializers.ModelSerializer):
         risk = Risk.objects.create(**validated_data)
 
         for field_object in field_value_objects:
-            print field_object
             RiskFieldValue.objects.create(risk=risk, field_object=field_object)
         return risk
+
+    def update(self, instance, validated_data):
+        request = self.context['request']
+        field_value_objects = validated_data.pop('values')
+
+        for field in field_value_objects:
+            print field.id
+            field.risk.risk = instance
+            print field.risk.all()
+
+            field.save()
+
+        # instance.values.bulk_create([field_value.risk for field_value in field_value_objects])
+
+            # field_object.save()
+
+        print instance.values.all()
+        return instance
 
 
 # {
