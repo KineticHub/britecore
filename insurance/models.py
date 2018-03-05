@@ -1,4 +1,6 @@
 import uuid
+from datetime import datetime
+from abc import abstractmethod
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
@@ -74,30 +76,50 @@ class BaseField(models.Model):
     class Meta:
         abstract = True
 
+    @classmethod
+    def convert_value(cls, data):
+        raise NotImplementedError("conversion must be implemented for this class")
+
 
 class TextField(BaseField):
-    text = models.TextField()
+    text = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return str(self.text)
 
+    @classmethod
+    def convert_value(cls, data):
+        return data
+
 
 class NumberField(BaseField):
-    number = models.IntegerField()
+    number = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return str(self.number)
 
+    @classmethod
+    def convert_value(cls, data):
+        return int(data)
+
 
 class DateField(BaseField):
-    date = models.DateField()
+    date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return str(self.date)
 
+    @classmethod
+    def convert_value(cls, data):
+        # presumes data is in the format of '2018-01-31T00:00:00.000Z'
+        return datetime.strptime(data.split('T')[0], '%Y-%m-%d')
 
 class EnumField(BaseField):
-    choice = models.TextField()
+    enum = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return str(self.choice)
+        return str(self.enum)
+
+    @classmethod
+    def convert_value(cls, data):
+        return data

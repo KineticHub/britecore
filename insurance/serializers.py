@@ -10,8 +10,8 @@ class RiskFieldValueRelatedField(serializers.ModelSerializer):
         print request.data
         print request.method
         risk_type = RiskType.objects.get(name=request.data['type'])
-        risk_field = RiskField.objects.get(name=data['field_name'], risk_type=risk_type)
-        model_data = {'field': risk_field, data['field_type']: data['value']}
+        risk_field = RiskField.objects.get(name=data['name'], risk_type=risk_type)
+        model_data = {'field': risk_field, data['field_type']: data.get('value', None)}
         FieldModel = apps.get_model('insurance', RiskField.FIELD_MODELS[data['field_type']])
 
         field_value = None
@@ -22,8 +22,8 @@ class RiskFieldValueRelatedField(serializers.ModelSerializer):
             risk = Risk.objects.get(uuid=request.data['uuid'])
 
             for field in risk.values.all():
-                if field.field_object.field.name == data['field_name']:
-                    setattr(field.field_object, data['field_type'], data['value'])
+                if field.field_object.field.name == data['name']:
+                    setattr(field.field_object, data['field_type'], FieldModel.convert_value(data.get('value', None)))
                     field.field_object.save()
                     return field.field_object
             field_value = FieldModel.objects.create(**model_data)
@@ -32,8 +32,8 @@ class RiskFieldValueRelatedField(serializers.ModelSerializer):
         return field_value
 
     def to_representation(self, value):
-        return {'field_name': value.field_object.field.name,
-                'value': value.field_object.text,
+        return {'name': value.field_object.field.name,
+                'value': getattr(value.field_object, value.field_object.field.field_type),
                 'field_type': value.field_object.field.field_type
                 }
 
