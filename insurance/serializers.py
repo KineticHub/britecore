@@ -103,21 +103,8 @@ class RiskSerializer(serializers.ModelSerializer):
         return risk
 
     def update(self, instance, validated_data):
-        request = self.context['request']
-        field_value_objects = validated_data.pop('values')
-
-        for field in field_value_objects:
-            print field.id
-            field.risk.risk = instance
-            print field.risk.all()
-
-            field.save()
-
-        # instance.values.bulk_create([field_value.risk for field_value in field_value_objects])
-
-            # field_object.save()
-
-        print instance.values.all()
+        instance.name = validated_data['name']
+        instance.save()
         return instance
 
 
