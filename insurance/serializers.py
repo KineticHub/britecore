@@ -17,6 +17,7 @@ class RiskFieldValueRelatedField(serializers.ModelSerializer):
         field_value = None
 
         if request.method == 'POST':
+            model_data[data['field_type']] = FieldModel.convert_value(data.get('value', None))
             field_value = FieldModel.objects.create(**model_data)
         elif request.method == 'PUT':
             risk = Risk.objects.get(uuid=request.data['uuid'])
@@ -43,10 +44,14 @@ class RiskFieldValueRelatedField(serializers.ModelSerializer):
 
 
 class RiskFieldSerializer(serializers.ModelSerializer):
+    # field_choices = serializers.SerializerMethodField()
 
     class Meta:
         model = RiskField
         fields = ('name', 'field_type', 'field_choices')
+
+    # def get_field_choices(self, obj):
+    #     return [x.strip().lower() for x in obj.field_choices.split(',')]
 
 
 class RiskTypeSerializer(serializers.ModelSerializer):

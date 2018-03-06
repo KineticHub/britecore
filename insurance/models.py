@@ -100,7 +100,7 @@ class NumberField(BaseField):
 
     @classmethod
     def convert_value(cls, data):
-        return int(data)
+        return int(data) if data else None
 
 
 class DateField(BaseField):
@@ -112,7 +112,7 @@ class DateField(BaseField):
     @classmethod
     def convert_value(cls, data):
         # presumes data is in the format of '2018-01-31T00:00:00.000Z'
-        return datetime.strptime(data.split('T')[0], '%Y-%m-%d')
+        return datetime.strptime(data.split('T')[0], '%Y-%m-%d') if data else None
 
 class EnumField(BaseField):
     enum = models.TextField(blank=True, null=True)
